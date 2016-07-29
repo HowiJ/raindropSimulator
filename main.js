@@ -20,40 +20,28 @@ var mainLoop = setInterval(function () {
     }
 
     //collision detection
-    // console.log(circles);
+    //For all of the circles
     for (var circle in circles) {
         var matches = board.retrieve(circle);
-            // console.log(circle);
-            for (var match in matches) {
-                // console.log('Circle: ',circle.id);
-                // console.log('Match: ',match.id);
-                if (circles[circle].id != matches[match].id) {
-                    // sqrt(  (y2-y1)*(y2-y1) + (x2-x1)*(x2-x1)  );
-                    // console.log('MatchY:', $('#'+matches[match].id).attr('cy'));
-                    // console.log('MatchX:', $('#'+matches[match].id).attr('cx'));
-
-                    var ydiff = parseInt($('#'+matches[match].id).attr('cy'))-parseInt($('#'+circles[circle].id).attr('cy')),
-                        xdiff = parseInt($('#'+matches[match].id).attr('cx'))-parseInt($('#'+circles[circle].id).attr('cx')),
-                        ysqr  = ydiff*ydiff,
-                        xsqr  = xdiff*xdiff;
-
-                    var distance = Math.sqrt(ysqr+xsqr);
-                    var contactDist = parseInt($('#'+circles[circle].id).attr('r'))+parseInt($('#'+matches[match].id).attr('r'));
-                    // console.log(ydiff);
-                    // console.log(xdiff);
-                    // console.log(ysqr);
-                    // console.log(xsqr);
-                    // console.log('Distance:',distance);
-                    // console.log('contactD:',contactDist);
-
-                    if (distance < contactDist) {
-                        circles[circle].explode();
-                        matches[match].explode();
-                    }
+        //For all of the matches
+        for (var match in matches) {
+            if (circles[circle].id != matches[match].id) {
+                //Distance formula.
+                var ydiff = parseInt($('#'+matches[match].id).attr('cy'))-parseInt($('#'+circles[circle].id).attr('cy')),
+                    xdiff = parseInt($('#'+matches[match].id).attr('cx'))-parseInt($('#'+circles[circle].id).attr('cx')),
+                    ysqr  = ydiff*ydiff,
+                    xsqr  = xdiff*xdiff;
+                //Actual Distance between two
+                var distance = Math.sqrt(ysqr+xsqr);
+                //distance for touching between the two
+                var contactDist = parseInt($('#'+circles[circle].id).attr('r'))+parseInt($('#'+matches[match].id).attr('r'));
+                //if touching
+                if (distance < contactDist) {
+                    circles[circle].explode();
+                    matches[match].explode();
                 }
-
-
             }
+        }
     }
 
     //Randomly generate circles
