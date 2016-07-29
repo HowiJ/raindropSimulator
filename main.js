@@ -13,7 +13,7 @@ var interval    = 1000/fps,
 var mainLoop = setInterval(function () {
     //Clock
     if (clock >= 500) { clock = 0; } else { clock++; };
-    //Clear quadtree and repopulate
+    //Clear quadtree and repopulate (needs to repopulate because needs to insert things in areas that we need);
     board.clear();
     for (var circle in circles) {
         board.insert(circles[circle]);
@@ -60,7 +60,7 @@ var mainLoop = setInterval(function () {
     if (clock == 0) {
         var x = Math.floor(Math.random()*400+8);
         var y = Math.floor(Math.random()*400+8);
-        // board.insert(new Circle('board', {width: 10, height: 10, x: x, y: y}, 'blue'));
+        board.insert(new Circle('board', {width: 10, height: 10, x: x, y: y}, 'blue'));
     }
 }, interval);
 

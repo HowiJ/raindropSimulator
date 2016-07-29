@@ -70,7 +70,7 @@ Quadtree.prototype.getIndex = function(obj) {
 
     return index;
 }
-//Inserting Objs
+//Inserting Objs into the tree
 Quadtree.prototype.insert = function(obj) {
     // console.log('Insert');
     if (this.nodes[0] != null) {
@@ -108,7 +108,7 @@ Quadtree.prototype.insert = function(obj) {
         // console.log('objs:',this.objects);
     }
 }
-//Get all possibles
+//Get all possible hits
 Quadtree.prototype.retrieve = function(obj, arr) {
     // console.log('retrieve');
     // console.log('----------------------\n');
@@ -128,7 +128,7 @@ Quadtree.prototype.retrieve = function(obj, arr) {
     // console.log('----------------------\n');
     return arr;
 }
-
+//Just to see.. Not really working lol.
 Quadtree.prototype.visualize = function() {
     var tree = '-';
     for (var i = 0; i < this.level; i++) {
