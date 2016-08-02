@@ -64,8 +64,8 @@ var reInsert = function() {
 }
 
 
-var fps         = 60,
-    interval    = 1000/fps,
+var tickrate         = 60,
+    interval    = 1000/tickrate,
     clock       = 0,
     newClock    = 20,
     start       = false;
