@@ -37,17 +37,27 @@ if (!window.jQuery) {
         document.getElementById(canvasid).appendChild(circle);
 
         var current = this;
-        var ignition = setInterval(function () {
+        this.ignition = setInterval(function () {
             if (parseInt($('#'+current.id).attr('r')) >= bounds.width) {
-                clearInterval(ignition);
+                clearInterval(this.ignition);
             } else {
                 $('#'+current.id).attr('r', parseInt($('#'+current.id).attr('r'))+1);
             }
         }, 1000/60);
+        // $('#'+this.id).animate({r: bounds.width}, 100, function() {
+        //     $('#'+this.id).attr('r', bounds.width);
+        //     var r = $('#'+this.id).attr('r');
+        //     if (parseInt(r) != bounds.width) {
+        //         console.log('wtf');
+        //         $('#'+this.id).attr('r', bounds.width);
+        //     }
+        // });
     }
 }
 Circle.prototype.explode = function() {
     if (this.idle) {
+        // console.log('Explode!');
+        // console.log(this.idle, this.id);
         this.idle = false;
         var count           = 0;
         var currentCircle   = this;

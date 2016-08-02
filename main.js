@@ -5,29 +5,44 @@ var board = new Quadtree(0, {
     y: $('#board').offset().top
 });
 //canvasid, bounds, color
-var collisionDetect = function(yes) {
+var collisionDetect = function(debug) {
+    if (!debug) {
+        console.log(circles);
+    }
     for (var circle in circles) {
-        var matches = board.retrieve(circle);
+        var matches = board.retrieve(circles[circle]);
+        if (!debug) {
+            console.log(matches);
+        }
         // For all of the matches
         for (var match in matches) {
-            if (circles[circle].id != matches[match].id) {
+            // if (!debug) {
+            //     console.log('circles',circles[circle]);
+            //     console.log('matches',matches[match]);
+            //     console.log('equal',circles[circle].id != matches[match].id);
+            //     console.log('id',circles[circle.id],matches[match].id);
+            // };
+            if (circles[circle] && matches[match] && circles[circle].id != matches[match].id) {
+                if (!debug) {
+                    console.log('ids',circles[circle].id,matches[match].id);
+                }
                 //Distance formula.
                 var ydiff = parseInt($('#'+matches[match].id).attr('cy'))-parseInt($('#'+circles[circle].id).attr('cy')),
                     xdiff = parseInt($('#'+matches[match].id).attr('cx'))-parseInt($('#'+circles[circle].id).attr('cx')),
                     ysqr  = ydiff*ydiff,
                     xsqr  = xdiff*xdiff;
-                    if (!yes) {
-                        console.log(ydiff, xdiff, ysqr, xsqr);
+                    if (!debug) {
+                        console.log('yDiff:',ydiff, 'xDiff:',xdiff, 'ySqr:',ysqr, 'xSqr:',xsqr);
                     }
                 //Actual Distance between two
                 var distance = Math.sqrt(ysqr+xsqr);
-                if (!yes) {
-                    console.log(distance);
+                if (!debug) {
+                    console.log('Distance',distance);
                 }
                 //distance for touching between the two
                 var contactDist = parseInt($('#'+circles[circle].id).attr('r'))+parseInt($('#'+matches[match].id).attr('r'));
-                if (!yes) {
-                    console.log(contactDist);
+                if (!debug) {
+                    console.log('ContactDist',contactDist);
                 }
                 //if touching
                 if (distance < contactDist) {
@@ -36,9 +51,15 @@ var collisionDetect = function(yes) {
                 }
             }
         }
-        if (!yes) {
+        if (!debug) {
             console.log('-------------------------------\n\n\n');
         }
+    }
+}
+var reInsert = function() {
+    board.clear();
+    for (var i = 0; i < circles.length; i++ ) {
+        board.insert(circles[i]);
     }
 }
 
@@ -47,26 +68,20 @@ var fps         = 60,
     interval    = 1000/fps,
     clock       = 0,
     newClock    = 20,
-    start       = true;
-var start = function() { start = true; }
-var stop  = function() { start = false; }
+    start       = false;
+var startSim = function() { start = true; }
+var stopSim  = function() { start = false; }
 
 var mainLoop = setInterval(function () {
     if (start) {
-        // console.log('Clock');
         //Clock (global cycle);
         if (clock >= newClock) { clock = 0; } else { clock++; };
         //Clear quadtree and repopulate (needs to repopulate because needs to insert things in areas that we need);
-        board.clear();
-        for (var i = 0; i < circles.length; i++ ) {
-            board.insert(circles[i]);
-        }
+        reInsert();
 
-        //collision detection
-        //For all of the circles
-        collisionDetect(true);
+        //collision detection for all of the circles
         //Pass in true for no logging
-
+        collisionDetect(true);
 
         //Randomly generate circles
         if (clock == 0) {
