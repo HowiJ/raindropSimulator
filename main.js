@@ -72,7 +72,7 @@ var tickrate    = 60,
     interval    = 1000/tickrate,
     clock       = 0,
     newClock    = 20,
-    start       = false;
+    start       = true;
 var startSim = function() { start = true; }
 var stopSim  = function() { start = false; }
 
