@@ -1,4 +1,5 @@
-var circles = [];
+var circles     = [],
+    intervals   = {};
 if (!window.jQuery) {
     console.log('Circle.js requires jQuery');
 } else {
@@ -37,21 +38,14 @@ if (!window.jQuery) {
         document.getElementById(canvasid).appendChild(circle);
 
         var current = this;
-        this.ignition = setInterval(function () {
+
+        var ignition = setInterval(function () {
             if (parseInt($('#'+current.id).attr('r')) >= bounds.width) {
-                clearInterval(this.ignition);
+                clearInterval(ignition);
             } else {
                 $('#'+current.id).attr('r', parseInt($('#'+current.id).attr('r'))+1);
             }
-        }, 1000/60);
-        // $('#'+this.id).animate({r: bounds.width}, 100, function() {
-        //     $('#'+this.id).attr('r', bounds.width);
-        //     var r = $('#'+this.id).attr('r');
-        //     if (parseInt(r) != bounds.width) {
-        //         console.log('wtf');
-        //         $('#'+this.id).attr('r', bounds.width);
-        //     }
-        // });
+        }, 16);
     }
 }
 Circle.prototype.explode = function() {
@@ -65,7 +59,9 @@ Circle.prototype.explode = function() {
             if (count >= 20) {
                 clearInterval(interval);
                 $('#'+currentCircle.id).remove();
-                circles.splice(circles.indexOf(currentCircle), 1);
+                // circles.splice(circles.indexOf(currentCircle), 1);
+                // circles[circles.indexOf(currentCircle)] = null;
+                delete circles[circles.indexOf(currentCircle)];
             };
             $('#'+currentCircle.id).attr('r', parseInt($('#'+currentCircle.id).attr('r'))+3);
             $('#'+currentCircle.id).animate({opacity: 0}, 300);

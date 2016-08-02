@@ -58,13 +58,17 @@ var collisionDetect = function(debug) {
 }
 var reInsert = function() {
     board.clear();
-    for (var i = 0; i < circles.length; i++ ) {
+    for (var i in circles) {
         board.insert(circles[i]);
     }
 }
+var randomSize = function(min, max) {
+    // var rand = Math.floor(Math.random()*max+min);
+    return Math.floor(Math.random()*(max-min)+min);
+}
 
 
-var tickrate         = 60,
+var tickrate    = 60,
     interval    = 1000/tickrate,
     clock       = 0,
     newClock    = 20,
@@ -85,10 +89,15 @@ var mainLoop = setInterval(function () {
 
         //Randomly generate circles
         if (clock == 0) {
+            var size = randomSize(5, 20),
+                widt = parseInt($(window).width()),
+                heig = parseInt($(window).height());
+            // console.log(size);
             // console.log('New Circle',circles.length);
-            var x = Math.floor(Math.random()*400+8);
-            var y = Math.floor(Math.random()*400+8);
-            board.insert(new Circle('board', {width: 10, height: 10, x: x, y: y}, 'blue'));
+            var x = Math.floor(Math.random()*widt);
+            var y = Math.floor(Math.random()*heig);
+            board.insert(new Circle('board', {width: size, height: size, x: x, y: y}, 'blue'));
+            newClock = Math.floor(Math.random()*(100-20)+20);
         }
     }
 }, interval);
@@ -102,5 +111,3 @@ $('#board').click(function(e) {
     // board.visualize();
     board.retrieve(circles[circles.length-1]);
 })
-
-// var arr =
