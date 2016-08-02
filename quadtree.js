@@ -1,7 +1,7 @@
 //Quadtree Class Declaration
 var Quadtree = function(level, bounds) {
     this.maxObj = 4;
-    this.maxLvl = 5;
+    this.maxLvl = 3;
     //{width, height, x, y}
     this.bounds     = bounds;
     //current level
@@ -16,9 +16,10 @@ var Quadtree = function(level, bounds) {
 //Clears out all objects from all nodes.
 Quadtree.prototype.clear = function() {
     // console.log('clear');
-    this.objects.length = 0;
-    for (var i = 0; i < this.nodes; i++) {
-        if (this.nodes[i] != null) {
+    this.objects = [];
+    // console.log('ThisLvl:',this.level, '___ThisObjs:',this.objects);
+    for (var i = 0; i < this.nodes.length; i++) {
+        if (this.nodes[i]) {
             this.nodes[i].clear();
         }
     }
@@ -26,8 +27,8 @@ Quadtree.prototype.clear = function() {
 //Splits the node into further quadtrees
 Quadtree.prototype.split = function() {
     // console.log('split');
-    var subWidth    = this.bounds.width,
-        subHeight   = this.bounds.height,
+    var subWidth    = this.bounds.width/2,
+        subHeight   = this.bounds.height/2,
         x           = this.bounds.x,
         y           = this.bounds.y;
 
@@ -84,8 +85,9 @@ Quadtree.prototype.insert = function(obj) {
     }
 
     this.objects.push(obj);
+    // console.log(obj);
     // console.log('fobj:',this.objects);
-    // console.log('#Objs: ',this.objects.length);
+    // console.log('#Objs: ',this.objects.length > this.maxObj);
     if (this.objects.length > this.maxObj && this.level < this.maxLvl) {
         // console.log('In IF');
         if (this.nodes[0] == null) {
@@ -99,8 +101,9 @@ Quadtree.prototype.insert = function(obj) {
             // console.log('GETTING INDEX:',index);
             if (index != -1) {
                 // console.log('i', i);
-                this.nodes[index].insert(this.objects[i]);
-                this.objects.splice(i, 1);
+                var insert = this.objects.splice(i, 1)[0];
+                this.nodes[index].insert(insert);
+                // console.log(insert);
             } else {
                 i++;
             }
@@ -119,12 +122,14 @@ Quadtree.prototype.retrieve = function(obj, arr) {
     if (index != -1 && this.nodes[0] != null) {
         this.nodes[index].retrieve(obj, arr);
     }
+    // console.log(this.objects.length);
     for (var i = 0; i < this.objects.length; i++) {
+        // console.log(this.objects.length);
         arr.push(this.objects[i]);
     }
     // console.log('On level:',this.level);
     // console.log('Arr:',     arr);
-    // console.log('Objects In Retrieve:', this.objects);
+    // console.log('Objects In this:', this.objects);
     // console.log('----------------------\n');
     return arr;
 }
@@ -135,11 +140,11 @@ Quadtree.prototype.visualize = function() {
         tree = tree+'--|';
     }
     console.log(tree,'>>',this.level);
-    // if (this.objects.length > 0) {
-    //     for (var i = 0; i < this.objects.length; i++) {
-    //         console.log(tree+' '+this.objects[i].id);
-    //     }
-    // }
+    if (this.objects.length > 0) {
+        for (var i = 0; i < this.objects.length; i++) {
+            console.log(tree+' '+this.objects[i].id);
+        }
+    }
     if (this.nodes[0]!= null) {
         this.nodes[0].visualize();
         this.nodes[1].visualize();
