@@ -1,9 +1,11 @@
 var circles     = [],
+    numCir      = 0,
     intervals   = {};
+
 if (!window.jQuery) {
     console.log('Circle.js requires jQuery');
 } else {
-    var Circle = function( canvasid, bounds, color ) {
+    var Circle = function( canvasid, bounds, fill, color ) {
     	var makeSVG = function(tag, attrs) {
             var el= document.createElementNS('http://www.w3.org/2000/svg', tag);
             for (var k in attrs)
@@ -28,7 +30,7 @@ if (!window.jQuery) {
             r       : 1,
             stroke  : color,
             id      : this.id,
-            fill    : 'transparent',
+            fill    : fill,
             class   : 'circle',
             idle    : this.idle,
             lineWidth: '2px'
@@ -36,6 +38,7 @@ if (!window.jQuery) {
         var circle = makeSVG('circle', attr);
         circles.push(this);
         document.getElementById(canvasid).appendChild(circle);
+        $('#'+this.id).attr('stroke-width', attr.lineWidth);
 
         var current = this;
 
@@ -62,9 +65,10 @@ Circle.prototype.explode = function() {
                 // circles.splice(circles.indexOf(currentCircle), 1);
                 // circles[circles.indexOf(currentCircle)] = null;
                 delete circles[circles.indexOf(currentCircle)];
+                numCir--;
             };
             $('#'+currentCircle.id).attr('r', parseInt($('#'+currentCircle.id).attr('r'))+3);
-            $('#'+currentCircle.id).animate({opacity: 0}, 300);
+            $('#'+currentCircle.id).animate({opacity: 0}, 400);
             count++;
         }, 1000/60);
     }
